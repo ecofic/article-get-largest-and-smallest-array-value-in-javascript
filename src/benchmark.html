@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <title>Getting the Largest, Smallest, and Average Values out of an Array</title>
+    <style type="text/css">
+      [v-cloak] { display:none; }
+    </style>
+  </head>
+  <body>
+    <div class="d-flex flex-column vh-100">
+      <nav class="navbar navbar-dark bg-primary">
+        <div class="container-fluid">
+          <span class="navbar-brand">Getting the Largest, Smallest, and Average Values out of an Array</span>
+        </div>
+      </nav>
+
+      <div id="testApp" v-cloak>
+        <div class="d-flex flex-column flex-fill">
+          <div class="border-bottom px-2 py-3">
+            <div class="row mx-0">
+              <div class="col-2 pe-4">
+                <div>Setup the Arrays</div>
+                <div class="text-muted">
+                    Specify how many elements should be in each Array.
+                </div>
+              </div>
+              <div class="col-10">
+                <div class="d-flex mb-3">
+                    <div class="me-5">
+                        <div class="mb-3">
+                            <label for="array1CountField" class="form-label">Array</label>
+                            <input type="number" class="form-control" id="arrayCountField" placeholder="1" v-model="arrayElementCount">
+                            <div class="form-text">Enter a positive number.</div>
+                        </div>
+
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="arrayRadioOptions" id="arrayValueType" value="values" v-model="arrayElementType">
+                            <label class="form-check-label" for="arrayValueType">Use primitive values</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="arrayRadioOptions" id="arrayObjectType" value="objects" v-model="arrayElementType">
+                            <label class="form-check-label" for="arrayObjectType">Use objects</label>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="border-bottom px-2 py-3">
+            <div class="row mx-0">
+              <div class="col-2 pe-4">
+                <div>Configure the Test</div>
+                <div class="text-muted">Specify how many times you want to run the test.</div>
+              </div>
+              <div class="col-10">
+                <div class="mb-3">
+                    <div class="w-50 d-flex align-items-center">
+                        <input type="range" class="flex-grow-1 form-range w-75" id="iterationSlider" min="0" max="1000" v-model="iterationsToRun">
+                        <input type="number" class="ms-3 form-control w-25" id="iterationSliderField" placeholder="1" v-model="iterationsToRun">
+                    </div>
+                    <div class="form-text">{{ iterationsToRunLabel }}</div>    
+                </div>
+
+                <ul class="list-inline">
+                    <li class="list-inline-item">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="useForCheckbox" v-model="useFor">
+                            <label class="form-check-label" for="useForCheckbox">Use <code>for</code></label>
+                        </div>
+                    </li>
+
+                    <li class="list-inline-item">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="useForEachCheckbox" v-model="useForEach">
+                            <label class="form-check-label" for="useForEachCheckbox">Use <code>forEach</code></label>
+                        </div>
+                    </li>
+
+                    <li class="list-inline-item">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="useForOfCheckbox" v-model="useForOf">
+                            <label class="form-check-label" for="useForOfCheckbox">Use <code>for...of</code></label>
+                        </div>
+                    </li>
+
+                    <li class="list-inline-item">
+                      <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="useForInCheckbox" v-model="useForIn">
+                          <label class="form-check-label" for="useForInCheckbox">Use <code>for...in</code></label>
+                      </div>
+                    </li>
+
+                    <li class="list-inline-item">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="useWhileCheckbox" v-model="useWhile">
+                        <label class="form-check-label" for="useWhileCheckbox">Use <code>while</code></label>
+                      </div>
+                    </li>
+
+                    <li class="list-inline-item">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="useMathCheckbox" v-model="useMath">
+                        <label class="form-check-label" for="useMathCheckbox">Use <code>Math</code> functions</label>
+                      </div>
+                    </li>
+                </ul>
+
+                <ul class="list-inline">
+                  <li class="list-inline-item">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" id="minimumRadioButton" value="minimum" v-model="goal">
+                      <label class="form-check-label" for="minimumRadioButton">Minimum</label>
+                    </div>
+                  </li>
+
+                  <li class="list-inline-item">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" id="maximumRadioButton" value="maximum" v-model="goal">
+                      <label class="form-check-label" for="maximumRadioButton">Maximum</label>
+                    </div>
+                  </li>
+
+                  <li class="list-inline-item">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" id="averageRadioButton" value="average" v-model="goal">
+                      <label class="form-check-label" for="averageRadioButton">Average</label>
+                    </div>
+                  </li>
+                </ul>
+
+                <button class="btn btn-primary" style="white-space: nowrap;" @click="runTests">Run Tests</button>
+              </div>
+            </div>
+          </div>
+  
+          <div class="flex-fill px-2 py-3">
+            <div class="row mx-0">
+              <div class="col-2 pe-4">
+                <div>Review the Results</div>
+                <button class="btn btn-link p-0" @click="clearResults">clear results</button>              
+              </div>
+              <div class="col-10">
+                <div v-if="testRuns.length">
+                  <div class="card mb-3" v-for="(testRun, runIndex) in testRuns">
+                    <div class="card-body">
+                      <div class="h4 card-title">Test Run #{{ testRun.number }}</div>
+                      <p class="text-muted">total run time: {{ testRun.runtime }} ms.</p>
+                      <div class="table-responsive">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th>Iteration #</th>
+                              <th v-if="useFor"><code>for</code> Runtime</th>
+                              <th v-if="useForEach"><code>forEach</code> Runtime</th>
+                              <th v-if="useForOf"><code>for...of</code> Runtime</th>
+                              <th v-if="useForIn"><code>for...in</code> Runtime</th>
+                              <th v-if="useWhile"><code>while</code> Runtime</th>
+                              <th v-if="useMath"><code>Math...</code> Runtime</th>
+                            </tr>
+                          </thead>
+
+                          <tbody>
+                            <tr v-for="(iteration, iterationIndex) in testRun.iterations">
+                              <td>{{ iteration.number }}</td>
+                              <td v-if="useFor" :class="getPerformanceClasses(iteration, testRun.iterations, 'forRuntime')">{{ formatRuntime(iteration.forRuntime) }}</td>
+                              <td v-if="useForEach" :class="getPerformanceClasses(iteration, testRun.iterations, 'forEachRuntime')">{{ formatRuntime(iteration.forEachRuntime) }}</td>
+                              <td v-if="useForOf" :class="getPerformanceClasses(iteration, testRun.iterations, 'forOfRuntime')">{{ formatRuntime(iteration.forOfRuntime) }}</td>
+                              <td v-if="useForIn" :class="getPerformanceClasses(iteration, testRun.iterations, 'forInRuntime')">{{ formatRuntime(iteration.forInRuntime) }}</td>
+                              <td v-if="useWhile" :class="getPerformanceClasses(iteration, testRun.iterations, 'whileRuntime')">{{ formatRuntime(iteration.whileRuntime) }}</td>
+                              <td v-if="useMath" :class="getPerformanceClasses(iteration, testRun.iterations, 'mathRuntime')">{{ formatRuntime(iteration.mathRuntime) }}</td>
+                            </tr>
+                          </tbody>
+
+                          <tfoot>
+                            <tr>
+                              <td>Average</td>
+                              <td v-if="useFor" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="testRun.avgForRuntime">{{ testRun.avgForRuntimeFixed }} ms.</td>
+                              <td v-if="useForEach" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="testRun.avgForEachRuntime">{{ testRun.avgForEachRuntimeFixed }} ms.</td>
+                              <td v-if="useForOf" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="testRun.avgForOfRuntime">{{ testRun.avgForOfRuntimeFixed }} ms.</td>
+                              <td v-if="useForIn" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="testRun.avgForInRuntime">{{ testRun.avgForInRuntimeFixed }} ms.</td>
+                              <td v-if="useWhile" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="testRun.avgWhileRuntime">{{ testRun.avgWhileRuntimeFixed }} ms.</td>
+                              <td v-if="useMath" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="testRun.avgMathRuntime">{{ testRun.avgMathRuntimeFixed }} ms.</td>
+                            </tr>
+                          </tfoot>
+                        </table>
+                      </div>
+
+                      <div class="text-muted">
+                          This test run relied on a generated array. The same array was used for every iteration and every approach. 
+                          Cells with <span class="text-success">green</span> text are the fastest for the <span class="fst-italic">iteration</span>.
+                          Cells with <span class="text-danger">red</span> text are the slowest for the <span class="fst-italic">iteration</span>.
+                          The cell with the <span class="bg-success text-white">green</span> background is the fastest across all iterations.
+                          The cell with the <span class="bg-danger text-white">red</span> background is the slowest across all iterations.
+                      </div>
+                    </div>
+                  </div>  
+                </div>
+                <div v-else>
+                  <div class="alert alert-secondary" role="alert">
+                      Specify how many elements should be in each array, configure how you want to test, and click "Run Tests"
+                  </div>                  
+                </div>
+              </div>
+            </div>  
+          </div>
+        </div>  
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@next"></script>    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        const worker = new Worker('./benchmark-worker.js');
+
+        const TestApp = {
+            mounted() {
+                worker.onmessage = (e) => {
+                    const command = e.data.command;
+                    if (command === 'initialize-array-completed') {
+                        this.runNextTestIteration();
+                    } else if (command === 'test-iteration-completed') {
+                        const iteration = e.data.iteration;
+                        this.onTestIterationCompleted(iteration);
+                    }
+                };
+            },
+
+            data() {
+                return {
+                    iterationsToRun: 100,
+                    iterationNumber: 0,
+                    goal: 'minimum',
+
+                    currentIteration: {},
+                    currentRun: {},
+                    testRuns: [],
+
+                    useFor: true,
+                    useForEach: true,
+                    useForOf: true,
+                    useForIn: true,
+                    useWhile: true,
+                    useMath: true,
+
+                    arrayElementType: 'values',
+                    arrayElementCount: 1000
+                };
+            },
+
+            computed: {
+                iterationsToRunLabel() {
+                    if (this.iterationsToRun === 1) {
+                        return 'The test will run once.';
+                    } else if (this.iterationsToRun === 0) {
+                        return 'The test will not run.';
+                    } else {
+                        return `The tests will run ${this.iterationsToRun} times.`;
+                    }
+                }
+            },
+
+            methods: {
+                /**
+                 * Reacts to the user clicking the "clear results" link.
+                 */
+                clearResults() {
+                    this.testRuns = [];
+                },
+
+                /**
+                 * Reacts to the user click the "Read File" button.
+                 */
+                runTests() {
+                    if (this.iterationsToRun > 0) {
+                        this.iterationNumber = 0;
+                        this.currentRun = {
+                            startTime: performance.now(),
+                            number: (this.testRuns.length + 1),  
+                            iterations: []
+                        };
+
+                        this.testRuns.push(this.currentRun);
+
+                        const message = { 
+                            command:'initialize-array', 
+                            arrayLength:this.arrayElementCount, 
+                            arrayType:this.arrayElementType
+                        };
+                        worker.postMessage(message);
+                    }
+                },
+
+                /**
+                 * Starts a test iteration 
+                 */
+                runNextTestIteration() {
+                    this.iterationNumber = this.iterationNumber + 1;
+                    this.currentIteration = { number: this.iterationNumber };
+
+                    const message = { 
+                      command:'run-iteration', number: this.iterationNumber, goal:this.goal, 
+                      useFor:this.useFor, useForEach:this.useForEach, 
+                      useForOf:this.useForOf, useForIn:this.useForIn,
+                      useWhile:this.useWhile, useMath:this.useMath
+                    };
+                    worker.postMessage(message);
+                },
+
+                /**
+                 * Reacts to the completion of a test iteration.
+                 */
+                onTestIterationCompleted(iteration) {
+                  this.currentRun.iterations.push(iteration);
+                  if (iteration.number < this.iterationsToRun) {
+                    this.runNextTestIteration();
+                  } else {
+                    const runtime = performance.now() - this.currentRun.startTime;
+                    this.currentRun.runtime = parseFloat(runtime.toFixed(3));
+
+                    const iterations = this.currentRun.iterations;
+                    if (this.useFor) {
+                      const mean = iterations.reduce((total, r) => total + r.forRuntime, 0) / iterations.length;
+                      this.currentRun.avgForRuntime = mean;
+                      this.currentRun.avgForRuntimeFixed = parseFloat(mean.toFixed(5));
+                    }
+
+                    if (this.useForEach) {
+                      const mean = iterations.reduce((total, r) => total + r.forEachRuntime, 0) / iterations.length;
+                      this.currentRun.avgForEachRuntime = mean;
+                      this.currentRun.avgForEachRuntimeFixed = parseFloat(mean.toFixed(5));
+                    }
+
+                    if (this.useForOf) {
+                      const mean = iterations.reduce((total, r) => total + r.forOfRuntime, 0) / iterations.length;
+                      this.currentRun.avgForOfRuntime = mean;
+                      this.currentRun.avgForOfRuntimeFixed = parseFloat(mean.toFixed(5));
+                    }
+
+                    if (this.useForIn) {
+                      const mean = iterations.reduce((total, r) => total + r.forInRuntime, 0) / iterations.length;
+                      this.currentRun.avgForInRuntime = mean;
+                      this.currentRun.avgForInRuntimeFixed = parseFloat(mean.toFixed(5));
+                    }
+
+                    if (this.useWhile) {
+                      const mean = iterations.reduce((total, r) => total + r.whileRuntime, 0) / iterations.length;
+                      this.currentRun.avgWhileRuntime = mean;
+                      this.currentRun.avgWhileRuntimeFixed = parseFloat(mean.toFixed(5));
+                    }
+
+                    if (this.useMath) {
+                      const mean = iterations.reduce((total, r) => total + r.mathRuntime, 0) / iterations.length;
+                      this.currentRun.avgMathRuntime = mean;
+                      this.currentRun.avgMathRuntimeFixed = parseFloat(mean.toFixed(5));
+                    }
+                  }
+                },
+
+                /**
+                 * Formats the runtime shown in the UI.
+                 */
+                formatRuntime(runtime) {
+                    let result = '0 ms.';
+                    if (runtime) {
+                        if (runtime === 'N/A') {
+                            result = 'N/A';
+                        } else {
+                            result = runtime + ' ms.';
+                        }
+                    }
+                    return result;
+                },
+
+                /**
+                 * Builds a list of the class names based on the current cell's value.
+                 */
+                getPerformanceClasses(iteration, results, propertyName) {
+                    // Identify overall best/worst performing
+                    const value = iteration[propertyName];
+                    const allRuntimes = [];
+                    results.forEach(r => {
+                        if (r.forRuntime > 0) {                   // This is a guard to ensure a value of "0" is not highlighted in any way.
+                            allRuntimes.push(r.forRuntime);
+                        }
+
+                        if (r.forEachRuntime > 0) {               // This is a guard to ensure a value of "0" is not highlighted in any way.
+                            allRuntimes.push(r.forEachRuntime);
+                        }
+
+                        if (r.forOfRuntime > 0) {                 // This is a guard to ensure a value of "0" is not highlighted in any way.
+                            allRuntimes.push(r.forOfRuntime);
+                        }
+
+                        if (r.forInRuntime > 0) {                 // This is a guard to ensure a value of "0" is not highlighted in any way.
+                          allRuntimes.push(r.forInRuntime);
+                        }
+
+                        if (r.whileRuntime > 0) {                 // This is a guard to ensure a value of "0" is not highlighted in any way.
+                          allRuntimes.push(r.whileRuntime);
+                        }
+
+                        if (r.mathRuntime > 0) {                  // This is a guard to ensure a value of "0" is not highlighted in any way.
+                          allRuntimes.push(r.mathRuntime);
+                        }
+                    });
+
+                    const fastestOverall = Math.min(...allRuntimes);
+                    const slowestOverall = Math.max(...allRuntimes);
+
+                    // Identify iteration best/worst performing
+                    const iterationRuntimes = [];
+                    if (iteration.forRuntime > 0) {
+                        iterationRuntimes.push(iteration.forRuntime);
+                    }
+                    if (iteration.forEachRuntime > 0) {
+                        iterationRuntimes.push(iteration.forEachRuntime);
+                    }
+                    if (iteration.forOfRuntime > 0) {
+                        iterationRuntimes.push(iteration.forOfRuntime);
+                    }
+                    if (iteration.forInRuntime > 0) {
+                      iterationRuntimes.push(iteration.forInRuntime);
+                    }
+                    if (iteration.whileRuntime > 0) {
+                      iterationRuntimes.push(iteration.whileRuntime);
+                    }
+                    if (iteration.mathRuntime > 0) {
+                      iterationRuntimes.push(iteration.mathRuntime);
+                    }
+
+
+                    const fastestInIteration = Math.min(...iterationRuntimes);
+                    const slowestInIteration = Math.max(...iterationRuntimes);
+
+                    // Append iteration-specific classes
+                    let classes = [];
+                    if (value == fastestInIteration) {
+                        classes.push('text-success');
+                    } else if (value == slowestInIteration) {
+                        classes.push('text-danger');
+                    }
+
+                    // Append test-wide classes
+                    if (value == slowestOverall) {
+                        classes.push('bg-danger');
+                        classes.push('text-white');
+                    } else if (value == fastestOverall) {
+                        classes.push('bg-success');
+                        classes.push('text-white');
+                    }
+                    return classes.join(' ');
+                }
+            }
+        };
+      
+        const testApp = Vue.createApp(TestApp);
+        testApp.mount('#testApp');
+    </script>
+  </body>
+</html>
