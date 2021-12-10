@@ -111,6 +111,20 @@
                         <label class="form-check-label" for="useMathCheckbox">Use <code>Math</code> functions</label>
                       </div>
                     </li>
+
+                    <li class="list-inline-item">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="useReduceCheckbox" v-model="useReduce">
+                        <label class="form-check-label" for="useReduceCheckbox">Use <code>reduce</code> function</label>
+                      </div>
+                    </li>
+
+                    <li class="list-inline-item">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="useMapCheckbox" v-model="useMap">
+                        <label class="form-check-label" for="useMapCheckbox">Use <code>map</code> function</label>
+                      </div>
+                    </li>
                 </ul>
 
                 <ul class="list-inline">
@@ -164,6 +178,8 @@
                               <th v-if="useForIn"><code>for...in</code> Runtime</th>
                               <th v-if="useWhile"><code>while</code> Runtime</th>
                               <th v-if="useMath"><code>Math...</code> Runtime</th>
+                              <th v-if="useReduce"><code>reduce</code> Runtime</th>
+                              <th v-if="useMap"><code>map</code> Runtime</th>
                             </tr>
                           </thead>
 
@@ -176,6 +192,8 @@
                               <td v-if="useForIn" :class="getPerformanceClasses(iteration, testRun.iterations, 'forInRuntime')">{{ formatRuntime(iteration.forInRuntime) }}</td>
                               <td v-if="useWhile" :class="getPerformanceClasses(iteration, testRun.iterations, 'whileRuntime')">{{ formatRuntime(iteration.whileRuntime) }}</td>
                               <td v-if="useMath" :class="getPerformanceClasses(iteration, testRun.iterations, 'mathRuntime')">{{ formatRuntime(iteration.mathRuntime) }}</td>
+                              <td v-if="useReduce" :class="getPerformanceClasses(iteration, testRun.iterations, 'reduceRuntime')">{{ formatRuntime(iteration.reduceRuntime) }}</td>
+                              <td v-if="useMap" :class="getPerformanceClasses(iteration, testRun.iterations, 'mapRuntime')">{{ formatRuntime(iteration.mapRuntime) }}</td>
                             </tr>
                           </tbody>
 
@@ -188,6 +206,8 @@
                               <td v-if="useForIn" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="testRun.avgForInRuntime">{{ testRun.avgForInRuntimeFixed }} ms.</td>
                               <td v-if="useWhile" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="testRun.avgWhileRuntime">{{ testRun.avgWhileRuntimeFixed }} ms.</td>
                               <td v-if="useMath" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="testRun.avgMathRuntime">{{ testRun.avgMathRuntimeFixed }} ms.</td>
+                              <td v-if="useReduce" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="testRun.avgReduceRuntime">{{ testRun.avgReduceRuntimeFixed }} ms.</td>
+                              <td v-if="useMap" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="testRun.avgMapRuntime">{{ testRun.avgMapRuntimeFixed }} ms.</td>
                             </tr>
                           </tfoot>
                         </table>
@@ -249,6 +269,8 @@
                     useForIn: true,
                     useWhile: true,
                     useMath: true,
+                    useReduce: true,
+                    useMap: true,
 
                     arrayElementType: 'values',
                     arrayElementCount: 1000
@@ -306,10 +328,12 @@
                     this.currentIteration = { number: this.iterationNumber };
 
                     const message = { 
-                      command:'run-iteration', number: this.iterationNumber, goal:this.goal, 
+                      command:'run-iteration', number:this.iterationNumber, 
+                      goal:this.goal, source:this.arrayElementType, 
                       useFor:this.useFor, useForEach:this.useForEach, 
                       useForOf:this.useForOf, useForIn:this.useForIn,
-                      useWhile:this.useWhile, useMath:this.useMath
+                      useWhile:this.useWhile, useMath:this.useMath,
+                      useReduce:this.useReduce, useMap:this.useMap
                     };
                     worker.postMessage(message);
                 },
@@ -360,6 +384,18 @@
                       const mean = iterations.reduce((total, r) => total + r.mathRuntime, 0) / iterations.length;
                       this.currentRun.avgMathRuntime = mean;
                       this.currentRun.avgMathRuntimeFixed = parseFloat(mean.toFixed(5));
+                    }
+
+                    if (this.useReduce) {
+                      const mean = iterations.reduce((total, r) => total + r.reduceRuntime, 0) / iterations.length;
+                      this.currentRun.avgReduceRuntime = mean;
+                      this.currentRun.avgReduceRuntimeFixed = parseFloat(mean.toFixed(5));
+                    }
+
+                    if (this.useMap) {
+                      const mean = iterations.reduce((total, r) => total + r.mapRuntime, 0) / iterations.length;
+                      this.currentRun.avgMapRuntime = mean;
+                      this.currentRun.avgMapRuntimeFixed = parseFloat(mean.toFixed(5));
                     }
                   }
                 },
