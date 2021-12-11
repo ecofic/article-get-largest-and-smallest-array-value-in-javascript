@@ -38,6 +38,7 @@ onmessage = (e) => {
         arrayType = options.source;
 
         tempMinimum = null;
+        tempMaximum = null;
         warmUp();
 
         if (options.goal === 'minimum') {
@@ -62,9 +63,23 @@ onmessage = (e) => {
             }
         } else if (options.goal === 'maximum') {
             if (arrayType === 'values') {
-
+                findMaxPrimitiveValueWithWhile(options.useWhile);
+                findMaxPrimitiveValueWithFor(options.useFor);
+                findMaxPrimitiveValueWithForEach(options.useForEach);
+                findMaxPrimitiveValueWithForOf(options.useForOf);
+                findMaxPrimitiveValueWithForIn(options.useForIn);
+                findMaxPrimitiveValueWithMath(options.useMath);
+                findMaxPrimitiveValueWithReduce(options.useReduce);
+                findMaxPrimitiveValueWithMap(options.useMap);
             } else if (arrayType === 'objects') {
-
+                findMaxObjectValueWithWhile(options.useWhile);
+                findMaxObjectValueWithFor(options.useFor);
+                findMaxObjectValueWithForEach(options.useForEach);
+                findMaxObjectValueWithForOf(options.useForOf);
+                findMaxObjectValueWithForIn(options.useForIn);
+                findMaxObjectValueWithMath(options.useMath);    
+                findMaxObjectValueWithReduce(options.useReduce);
+                findMaxObjectValueWithMap(options.useMap);
             }
         }
 
@@ -223,7 +238,7 @@ onmessage = (e) => {
      * Finds the minimum value in an Array of objects using a while loop.
      * This function assumes a property named "p2" contains the value used for evaluation.
     */
-     function findMinObjectValueWithWhile(shouldRun) {
+    function findMinObjectValueWithWhile(shouldRun) {
         if (shouldRun) {
             const startTime = performance.now();
             let i = 0;
@@ -248,7 +263,7 @@ onmessage = (e) => {
      * Finds the minimum value in an Array of objects using for loop.
      * This function assumes a property named "p2" contains the value used for evaluation.
      */
-     function findMinObjectValueWithFor(shouldRun) {
+    function findMinObjectValueWithFor(shouldRun) {
         if (shouldRun) {
             const startTime = performance.now();
 
@@ -270,7 +285,7 @@ onmessage = (e) => {
      * Finds the minimum value in an Array of objects using a forEach
      * This function assumes a property named "p2" contains the value used for evaluation.
      */
-     function findMinObjectValueWithForEach(shouldRun) {
+    function findMinObjectValueWithForEach(shouldRun) {
         if (shouldRun) {
             const startTime = performance.now();
 
@@ -292,7 +307,7 @@ onmessage = (e) => {
      * Finds the minimum value in an Array of objects using for...of loop.
      * This function assumes a property named "p2" contains the value used for evaluation.
      */
-     function findMinObjectValueWithForOf(shouldRun) {
+    function findMinObjectValueWithForOf(shouldRun) {
         if (shouldRun) {
             const startTime = performance.now();
 
@@ -314,7 +329,7 @@ onmessage = (e) => {
      * Finds the minimum value in an Array of objects using a for...in loop.
      * This function assumes a property named "p2" contains the value used for evaluation.
      */
-     function findMinObjectValueWithForIn(shouldRun) {
+    function findMinObjectValueWithForIn(shouldRun) {
         if (shouldRun) {
             const startTime = performance.now();
 
@@ -358,7 +373,7 @@ onmessage = (e) => {
      * Finds the minimum value in an Array of objects using the reduce function.
      * This function assumes a property named "p2" contains the value used for evaluation.
      */
-     function findMinObjectValueWithReduce(shouldRun) {
+    function findMinObjectValueWithReduce(shouldRun) {
         if (shouldRun) {
             const startTime = performance.now();
             const reducer = (previous, current) => {
@@ -376,7 +391,7 @@ onmessage = (e) => {
      * Finds the minimum value in an Array of primitive values using the map function.
      * This function assumes a property named "p2" contains the value used for evaluation.
      */
-     function findMinObjectValueWithMap(shouldRun) {
+    function findMinObjectValueWithMap(shouldRun) {
         if (shouldRun) {
             const startTime = performance.now();
             const mappings = array.map(i => i.p2);
@@ -384,6 +399,322 @@ onmessage = (e) => {
             iteration.mapRuntime = performance.now() - startTime;
 
             assertEquality(tempMinimum, minimum);
+        }
+    }
+
+    /**
+     * Finds the maximum value in an Array of primitive values using a while loop.
+     */
+     function findMaxPrimitiveValueWithWhile(shouldRun) {
+        if (shouldRun) {
+            const startTime = performance.now();
+            let i = 0;
+
+            let maximum = Number.NaN;
+            while (i < array.length) {
+                if (array[i] > maximum) {
+                    maximum = array[i];
+                } else if (Number.isNaN(maximum)) {
+                    maximum = array[i];
+                }
+                i = i + 1;
+            }
+            iteration.whileRuntime = performance.now() - startTime;
+
+            tempMaximum = maximum;
+        }
+    }
+
+    /**
+     * Finds the maximum value in an Array of primitive values using for loop.
+     */
+    function findMaxPrimitiveValueWithFor(shouldRun) {
+        if (shouldRun) {            
+            const startTime = performance.now();
+
+            let maximum = Number.NaN;
+            for (let i=0; i<array.length; i++) {
+                if (array[i] > maximum) {
+                    maximum = array[i];
+                } else if (Number.isNaN(maximum)) {
+                    maximum = array[i];
+                }
+            }
+            iteration.forRuntime = performance.now() - startTime;
+
+            assertEquality(tempMaximum, maximum);
+        }
+    }
+
+    /**
+     * Finds the maximum value in an Array of primitive values using a forEach
+     */
+     function findMaxPrimitiveValueWithForEach(shouldRun) {
+        if (shouldRun) {
+            const startTime = performance.now();
+
+            let maximum = Number.NaN;
+            array.forEach(i => {
+                if (i > maximum) {
+                    maximum = i;
+                } else if (Number.isNaN(maximum)) {
+                    maximum = i;
+                }
+            });
+            iteration.forEachRuntime = performance.now() - startTime;
+
+            assertEquality(tempMaximum, maximum);
+        }
+    }
+
+    /**
+     * Finds the maximum value in an Array of primitive values using for loop.
+     */
+     function findMaxPrimitiveValueWithForOf(shouldRun) {
+        if (shouldRun) {
+            const startTime = performance.now();
+
+            let maximum = Number.NaN;
+            for (let i of array) {
+                if (i > maximum) {
+                    maximum = i;
+                } else if (Number.isNaN(maximum)) {
+                    maximum = i;
+                }
+            }
+            iteration.forOfRuntime = performance.now() - startTime;
+
+            assertEquality(tempMaximum, maximum);
+        }
+    }
+
+    /**
+     * Finds the maximum value in an Array of primitive values using a for...in loop.
+     */
+     function findMaxPrimitiveValueWithForIn(shouldRun) {
+        if (shouldRun) {
+            const startTime = performance.now();
+
+            let maximum = Number.NaN;
+            for (let i in array) {
+                if (array[i] > maximum) {
+                    maximum = array[i];
+                } else if (Number.isNaN(maximum)) {
+                    maximum = array[i];
+                }
+            }
+            iteration.forInRuntime = performance.now() - startTime;
+
+            assertEquality(tempMaximum, maximum);
+        }
+    }
+
+    /**
+     * Finds the maximum value in an Array of primitive values using Math.Max and the spread syntax.
+     */
+    function findMaxPrimitiveValueWithMath(shouldRun) {
+        if (shouldRun) {
+            const startTime = performance.now();
+            const maximum = Math.max(...array);
+            iteration.mathRuntime = performance.now() - startTime;
+
+            assertEquality(tempMaximum, maximum);
+        }
+    }
+
+    /**
+     * Finds the maximum value in an Array of primitive values using the reduce function.
+     */
+    function findMaxPrimitiveValueWithReduce(shouldRun) {
+        if (shouldRun) {
+            const startTime = performance.now();
+            const maximum = array.reduce((previous, current) => previous > current ? previous : current);
+            iteration.reduceRuntime = performance.now() - startTime;
+
+            assertEquality(tempMaximum, maximum);
+        }
+    }
+
+    /**
+     * Finds the maximum value in an Array of primitive values using the map function.
+     */
+     function findMaxPrimitiveValueWithMap(shouldRun) {
+        if (shouldRun) {
+            const startTime = performance.now();
+
+            const mappings = array.map(i => i);
+            const maximum = Math.max(...mappings);
+            iteration.mapRuntime = performance.now() - startTime;
+
+            assertEquality(tempMaximum, maximum);
+        }
+    }
+
+    /**
+     * Finds the maximum value in an Array of objects using a while loop.
+     * This function assumes a property named "p2" contains the value used for evaluation.
+    */
+     function findMaxObjectValueWithWhile(shouldRun) {
+        if (shouldRun) {
+            const startTime = performance.now();
+            let i = 0;
+
+            let maximum = Number.NaN;
+            while (i < array.length) {
+                const item = array[i];
+                if (item.p2 > maximum) {
+                    maximum = item.p2;
+                } else if (Number.isNaN(maximum)) {
+                    maximum = item.p2;
+                }
+                i = i + 1;
+            }
+            iteration.whileRuntime = performance.now() - startTime;
+
+            tempMaximum = maximum;
+        }
+    }
+
+    /**
+     * Finds the maximum value in an Array of objects using for loop.
+     * This function assumes a property named "p2" contains the value used for evaluation.
+     */
+    function findMaxObjectValueWithFor(shouldRun) {
+        if (shouldRun) {
+            const startTime = performance.now();
+
+            let maximum = Number.NaN;
+            for (let i=0; i<array.length; i++) {
+                if (array[i].p2 > maximum) {
+                    maximum = array[i].p2;
+                } else if (Number.isNaN(maximum)) {
+                    maximum = array[i].p2;
+                }
+            }
+            iteration.forRuntime = performance.now() - startTime;
+
+            assertEquality(tempMaximum, maximum);
+        }
+    }
+
+    /**
+     * Finds the maximum value in an Array of objects using a forEach
+     * This function assumes a property named "p2" contains the value used for evaluation.
+     */
+    function findMaxObjectValueWithForEach(shouldRun) {
+        if (shouldRun) {
+            const startTime = performance.now();
+
+            let maximum = Number.NaN;
+            array.forEach(i => {
+                if (i.p2 < maximum) {
+                    maximum = i.p2;
+                } else if (Number.isNaN(maximum)) {
+                    maximum = i.p2;
+                }
+            });
+            iteration.forEachRuntime = performance.now() - startTime;
+
+            assertEquality(tempMaximum, maximum);
+        }
+    }
+
+    /**
+     * Finds the maximum value in an Array of objects using for...of loop.
+     * This function assumes a property named "p2" contains the value used for evaluation.
+     */
+    function findMaxObjectValueWithForOf(shouldRun) {
+        if (shouldRun) {
+            const startTime = performance.now();
+
+            let maximum = Number.NaN;
+            for (let i of array) {
+                if (i.p2 > maximum) {
+                    maximum = i.p2;
+                } else if (Number.isNaN(maximum)) {
+                    maximum = i.p2;
+                }
+            }
+            iteration.forOfRuntime = performance.now() - startTime;
+
+            assertEquality(tempMaximum, maximum);
+        }
+    }
+
+    /**
+     * Finds the maximum value in an Array of objects using a for...in loop.
+     * This function assumes a property named "p2" contains the value used for evaluation.
+     */
+    function findMaxObjectValueWithForIn(shouldRun) {
+        if (shouldRun) {
+            const startTime = performance.now();
+
+            let maximum = Number.NaN;
+            for (let i in array) {
+                if (array[i].p2 > maximum) {
+                    maximum = array[i].p2;
+                } else if (Number.isNaN(maximum)) {
+                    maximum = array[i].p2;
+                }
+            }
+            iteration.forInRuntime = performance.now() - startTime;
+
+            assertEquality(tempMaximum, maximum);
+        }
+    }
+
+    /**
+     * Finds the maximum value in an Array of objects using Math.Min and the spread syntax.
+     * This function assumes a property named "p2" contains the value used for evaluation.
+     */
+    function findMaxObjectValueWithMath(shouldRun) {
+        if (shouldRun) {
+            const startTime = performance.now();            
+            const mappings = [];
+
+            let i = 0;
+            while (i < array.length) {
+                mappings.push(array[i].p2);
+                i = i + 1;
+            }
+
+            const maximum = Math.max(...mappings);
+            iteration.mathRuntime = performance.now() - startTime;
+
+            assertEquality(tempMaximum, maximum);
+        }
+    }
+
+    /**
+     * Finds the maximum value in an Array of objects using the reduce function.
+     * This function assumes a property named "p2" contains the value used for evaluation.
+     */
+    function findMaxObjectValueWithReduce(shouldRun) {
+        if (shouldRun) {
+            const startTime = performance.now();
+            const reducer = (previous, current) => {
+                const pv = previous ??= current.p2;
+                return pv > current.p2 ? pv : current.p2;
+            };
+            const maximum = array.reduce(reducer, null);
+            iteration.reduceRuntime = performance.now() - startTime;
+
+            assertEquality(tempMaximum, maximum);
+        }
+    }
+
+    /**
+     * Finds the maximum value in an Array of primitive values using the map function.
+     * This function assumes a property named "p2" contains the value used for evaluation.
+     */
+    function findMaxObjectValueWithMap(shouldRun) {
+        if (shouldRun) {
+            const startTime = performance.now();
+            const mappings = array.map(i => i.p2);
+            const maximum = Math.max(...mappings);
+            iteration.mapRuntime = performance.now() - startTime;
+
+            assertEquality(tempMaximum, maximum);
         }
     }
 
