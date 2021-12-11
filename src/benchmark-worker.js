@@ -38,122 +38,37 @@ onmessage = (e) => {
         arrayType = options.source;
 
         tempMinimum = null;
+        warmUp();
 
         if (options.goal === 'minimum') {
             if (arrayType === 'values') {
+                findMinPrimitiveValueWithWhile(options.useWhile);
                 findMinPrimitiveValueWithFor(options.useFor);
                 findMinPrimitiveValueWithForEach(options.useForEach);
                 findMinPrimitiveValueWithForOf(options.useForOf);
                 findMinPrimitiveValueWithForIn(options.useForIn);
-                findMinPrimitiveValueWithWhile(options.useWhile);
                 findMinPrimitiveValueWithMath(options.useMath);
                 findMinPrimitiveValueWithReduce(options.useReduce);
                 findMinPrimitiveValueWithMap(options.useMap);
             } else if (arrayType === 'objects') {
+                findMinObjectValueWithWhile(options.useWhile);
                 findMinObjectValueWithFor(options.useFor);
                 findMinObjectValueWithForEach(options.useForEach);
                 findMinObjectValueWithForOf(options.useForOf);
                 findMinObjectValueWithForIn(options.useForIn);
-                findMinObjectValueWithWhile(options.useWhile);
                 findMinObjectValueWithMath(options.useMath);    
                 findMinObjectValueWithReduce(options.useReduce);
                 findMinObjectValueWithMap(options.useMap);
             }
         } else if (options.goal === 'maximum') {
-            findMaxPrimitiveValueWithFor(options.useFor);
-            findMaxPrimitiveValueWithForEach(options.useForEach);
-            findMaxPrimitiveValueWithForOf(options.useForOf);
-            findMaxPrimitiveValueWithForIn(options.useForIn);
-            findMaxPrimitiveValueWithWhile(options.useWhile);
-            findMaxPrimitiveValueWithMath(options.useMath);    
-        } else if (options.goal === 'average') {
+            if (arrayType === 'values') {
 
+            } else if (arrayType === 'objects') {
+
+            }
         }
 
         completeIteration();
-    }
-
-    /**
-     * Finds the minimum value in an Array of primitive values using for loop.
-     */
-    function findMinPrimitiveValueWithFor(shouldRun) {
-        if (shouldRun) {            
-            const startTime = performance.now();
-
-            let minimum = Number.NaN;
-            for (let i=0; i<array.length; i++) {
-                if (array[i] < minimum) {
-                    minimum = array[i];
-                } else if (Number.isNaN(minimum)) {
-                    minimum = array[i];
-                }
-            }
-            iteration.forRuntime = performance.now() - startTime;
-
-            console.log(`for: found:${minimum}`);
-            tempMinimum = minimum;
-        }
-    }
-
-    /**
-     * Finds the minimum value in an Array of primitive values using a forEach
-     */
-     function findMinPrimitiveValueWithForEach(shouldRun) {
-        if (shouldRun) {
-            const startTime = performance.now();
-
-            let minimum = Number.NaN;
-            array.forEach(i => {
-                if (i < minimum) {
-                    minimum = i;
-                } else if (Number.isNaN(minimum)) {
-                    minimum = i;
-                }
-            });
-            iteration.forEachRuntime = performance.now() - startTime;
-
-            console.log(`forEach: expected:${tempMinimum}, found:${minimum}`);
-        }
-    }
-
-    /**
-     * Finds the minimum value in an Array of primitive values using for loop.
-     */
-     function findMinPrimitiveValueWithForOf(shouldRun) {
-        if (shouldRun) {
-            const startTime = performance.now();
-
-            let minimum = Number.NaN;
-            for (let i of array) {
-                if (i < minimum) {
-                    minimum = i;
-                } else if (Number.isNaN(minimum)) {
-                    minimum = i;
-                }
-            }
-            iteration.forOfRuntime = performance.now() - startTime;
-            console.log(`forOf: expected:${tempMinimum}, found:${minimum}`);
-        }
-    }
-
-    /**
-     * Finds the minimum value in an Array of primitive values using a for...in loop.
-     */
-     function findMinPrimitiveValueWithForIn(shouldRun) {
-        if (shouldRun) {
-            const startTime = performance.now();
-
-            let minimum = Number.NaN;
-            for (let i in array) {
-                if (array[i] < minimum) {
-                    minimum = array[i];
-                } else if (Number.isNaN(minimum)) {
-                    minimum = array[i];
-                }
-            }
-            iteration.forInRuntime = performance.now() - startTime;
-            console.log(`forIn: expected:${tempMinimum}, found:${minimum}`);
-        }
     }
 
     /**
@@ -174,7 +89,92 @@ onmessage = (e) => {
                 i = i + 1;
             }
             iteration.whileRuntime = performance.now() - startTime;
-            console.log(`while: expected:${tempMinimum}, found:${minimum}`);
+
+            tempMinimum = minimum;
+        }
+    }
+
+    /**
+     * Finds the minimum value in an Array of primitive values using for loop.
+     */
+    function findMinPrimitiveValueWithFor(shouldRun) {
+        if (shouldRun) {            
+            const startTime = performance.now();
+
+            let minimum = Number.NaN;
+            for (let i=0; i<array.length; i++) {
+                if (array[i] < minimum) {
+                    minimum = array[i];
+                } else if (Number.isNaN(minimum)) {
+                    minimum = array[i];
+                }
+            }
+            iteration.forRuntime = performance.now() - startTime;
+
+            assertEquality(tempMinimum, minimum);
+        }
+    }
+
+    /**
+     * Finds the minimum value in an Array of primitive values using a forEach
+     */
+     function findMinPrimitiveValueWithForEach(shouldRun) {
+        if (shouldRun) {
+            const startTime = performance.now();
+
+            let minimum = Number.NaN;
+            array.forEach(i => {
+                if (i < minimum) {
+                    minimum = i;
+                } else if (Number.isNaN(minimum)) {
+                    minimum = i;
+                }
+            });
+            iteration.forEachRuntime = performance.now() - startTime;
+
+            assertEquality(tempMinimum, minimum);
+        }
+    }
+
+    /**
+     * Finds the minimum value in an Array of primitive values using for loop.
+     */
+     function findMinPrimitiveValueWithForOf(shouldRun) {
+        if (shouldRun) {
+            const startTime = performance.now();
+
+            let minimum = Number.NaN;
+            for (let i of array) {
+                if (i < minimum) {
+                    minimum = i;
+                } else if (Number.isNaN(minimum)) {
+                    minimum = i;
+                }
+            }
+            iteration.forOfRuntime = performance.now() - startTime;
+
+            assertEquality(tempMinimum, minimum);
+        }
+    }
+
+    /**
+     * Finds the minimum value in an Array of primitive values using a for...in loop.
+     */
+     function findMinPrimitiveValueWithForIn(shouldRun) {
+        if (shouldRun) {
+            const startTime = performance.now();
+
+            let minimum = Number.NaN;
+            for (let i in array) {
+                if (array[i] < minimum) {
+                    minimum = array[i];
+                } else if (Number.isNaN(minimum)) {
+                    minimum = array[i];
+                }
+            }
+            iteration.forInRuntime = performance.now() - startTime;
+
+            assertEquality(tempMinimum, minimum);
         }
     }
 
@@ -186,7 +186,8 @@ onmessage = (e) => {
             const startTime = performance.now();
             const minimum = Math.min(...array);
             iteration.mathRuntime = performance.now() - startTime;
-            console.log(`math: expected:${tempMinimum}, found:${minimum}`);
+
+            assertEquality(tempMinimum, minimum);
         }
     }
 
@@ -196,8 +197,10 @@ onmessage = (e) => {
     function findMinPrimitiveValueWithReduce(shouldRun) {
         if (shouldRun) {
             const startTime = performance.now();
-            const minimum = array.reduce((last, val) => last < val ? last : val);
+            const minimum = array.reduce((previous, current) => previous < current ? previous : current);
             iteration.reduceRuntime = performance.now() - startTime;
+
+            assertEquality(tempMinimum, minimum);
         }
     }
 
@@ -212,89 +215,7 @@ onmessage = (e) => {
             const minimum = Math.min(...mappings);
             iteration.mapRuntime = performance.now() - startTime;
 
-            console.log(`map: expected:${tempMinimum}, found:${minimum}`);
-        }
-    }
-
-    /**
-     * Finds the minimum value in an Array of objects using for loop.
-     * This function assumes a property named "p2" contains the value used for evaluation.
-     */
-     function findMinObjectValueWithFor(shouldRun) {
-        if (shouldRun) {
-            const startTime = performance.now();
-
-            let minimum = Number.NaN;
-            for (let i=0; i<array.length; i++) {
-                if (array[i].p2 < minimum) {
-                    minimum = array[i].p2;
-                } else if (Number.isNaN(minimum)) {
-                    minimum = array[i].p2;
-                }
-            }
-            iteration.forRuntime = performance.now() - startTime;
-        }
-    }
-
-    /**
-     * Finds the minimum value in an Array of objects using a forEach
-     * This function assumes a property named "p2" contains the value used for evaluation.
-     */
-     function findMinObjectValueWithForEach(shouldRun) {
-        if (shouldRun) {
-            const startTime = performance.now();
-
-            let minimum = Number.NaN;
-            array.forEach(i => {
-                if (i.p2 < minimum) {
-                    minimum = i.p2;
-                } else if (Number.isNaN(minimum)) {
-                    minimum = i.p2;
-                }
-            });
-            iteration.forEachRuntime = performance.now() - startTime;
-        }
-    }
-
-    /**
-     * Finds the minimum value in an Array of objects using for...of loop.
-     * This function assumes a property named "p2" contains the value used for evaluation.
-     */
-     function findMinObjectValueWithForOf(shouldRun) {
-        if (shouldRun) {
-            const startTime = performance.now();
-
-            let minimum = Number.NaN;
-            for (let i of array) {
-                if (i.p2 < minimum) {
-                    minimum = i.p2;
-                } else if (Number.isNaN(minimum)) {
-                    minimum = i.p2;
-                }
-            }
-            iteration.forOfRuntime = performance.now() - startTime;
-        }
-    }
-
-    /**
-     * Finds the minimum value in an Array of objects using a for...in loop.
-     * This function assumes a property named "p2" contains the value used for evaluation.
-     */
-     function findMinObjectValueWithForIn(shouldRun) {
-        console.error('The findMinObjectValueWithForIn function is not working yet.');
-        if (shouldRun) {
-            const startTime = performance.now();
-            console.log('for...in:');
-
-            let minimum = Number.NaN;
-            for (let i in array) {
-                if (i < minimum) {
-                    minimum = i;
-                } else if (Number.isNaN(minimum)) {
-                    minimum = i;
-                }
-            }
-            iteration.forInRuntime = performance.now() - startTime;
+            assertEquality(tempMinimum, minimum);
         }
     }
 
@@ -318,6 +239,96 @@ onmessage = (e) => {
                 i = i + 1;
             }
             iteration.whileRuntime = performance.now() - startTime;
+
+            tempMinimum = minimum;
+        }
+    }
+
+    /**
+     * Finds the minimum value in an Array of objects using for loop.
+     * This function assumes a property named "p2" contains the value used for evaluation.
+     */
+     function findMinObjectValueWithFor(shouldRun) {
+        if (shouldRun) {
+            const startTime = performance.now();
+
+            let minimum = Number.NaN;
+            for (let i=0; i<array.length; i++) {
+                if (array[i].p2 < minimum) {
+                    minimum = array[i].p2;
+                } else if (Number.isNaN(minimum)) {
+                    minimum = array[i].p2;
+                }
+            }
+            iteration.forRuntime = performance.now() - startTime;
+
+            assertEquality(tempMinimum, minimum);
+        }
+    }
+
+    /**
+     * Finds the minimum value in an Array of objects using a forEach
+     * This function assumes a property named "p2" contains the value used for evaluation.
+     */
+     function findMinObjectValueWithForEach(shouldRun) {
+        if (shouldRun) {
+            const startTime = performance.now();
+
+            let minimum = Number.NaN;
+            array.forEach(i => {
+                if (i.p2 < minimum) {
+                    minimum = i.p2;
+                } else if (Number.isNaN(minimum)) {
+                    minimum = i.p2;
+                }
+            });
+            iteration.forEachRuntime = performance.now() - startTime;
+
+            assertEquality(tempMinimum, minimum);
+        }
+    }
+
+    /**
+     * Finds the minimum value in an Array of objects using for...of loop.
+     * This function assumes a property named "p2" contains the value used for evaluation.
+     */
+     function findMinObjectValueWithForOf(shouldRun) {
+        if (shouldRun) {
+            const startTime = performance.now();
+
+            let minimum = Number.NaN;
+            for (let i of array) {
+                if (i.p2 < minimum) {
+                    minimum = i.p2;
+                } else if (Number.isNaN(minimum)) {
+                    minimum = i.p2;
+                }
+            }
+            iteration.forOfRuntime = performance.now() - startTime;
+
+            assertEquality(tempMinimum, minimum);
+        }
+    }
+
+    /**
+     * Finds the minimum value in an Array of objects using a for...in loop.
+     * This function assumes a property named "p2" contains the value used for evaluation.
+     */
+     function findMinObjectValueWithForIn(shouldRun) {
+        if (shouldRun) {
+            const startTime = performance.now();
+
+            let minimum = Number.NaN;
+            for (let i in array) {
+                if (array[i].p2 < minimum) {
+                    minimum = array[i].p2;
+                } else if (Number.isNaN(minimum)) {
+                    minimum = array[i].p2;
+                }
+            }
+            iteration.forInRuntime = performance.now() - startTime;
+
+            assertEquality(tempMinimum, minimum);
         }
     }
 
@@ -326,11 +337,20 @@ onmessage = (e) => {
      * This function assumes a property named "p2" contains the value used for evaluation.
      */
     function findMinObjectValueWithMath(shouldRun) {
-        console.error('The findMinObjectValueWithMath function is not working yet.');
         if (shouldRun) {
-            const startTime = performance.now();
-            const minimum = Math.min(...array);
+            const startTime = performance.now();            
+            const mappings = [];
+
+            let i = 0;
+            while (i < array.length) {
+                mappings.push(array[i].p2);
+                i = i + 1;
+            }
+
+            const minimum = Math.min(...mappings);
             iteration.mathRuntime = performance.now() - startTime;
+
+            assertEquality(tempMinimum, minimum);
         }
     }
 
@@ -341,8 +361,14 @@ onmessage = (e) => {
      function findMinObjectValueWithReduce(shouldRun) {
         if (shouldRun) {
             const startTime = performance.now();
-            const minimum = array.reduce((min, i) => i.p2 < min ? i.p2 : min, array[0].p2);
+            const reducer = (previous, current) => {
+                const pv = previous ??= current.p2;
+                return pv < current.p2 ? pv : current.p2;
+            };
+            const minimum = array.reduce(reducer, null);
             iteration.reduceRuntime = performance.now() - startTime;
+
+            assertEquality(tempMinimum, minimum);
         }
     }
 
@@ -353,117 +379,42 @@ onmessage = (e) => {
      function findMinObjectValueWithMap(shouldRun) {
         if (shouldRun) {
             const startTime = performance.now();
-            const minimum = Math.min(array.map(i => i.p2));
+            const mappings = array.map(i => i.p2);
+            const minimum = Math.min(...mappings);
             iteration.mapRuntime = performance.now() - startTime;
+
+            assertEquality(tempMinimum, minimum);
+        }
+    }
+
+    function warmUp() {
+        const iterations = 1000;
+
+        let result = 0;
+        for (let i1=0; i1<iterations; i1++) {
+            result = result + i1;            
+        }
+
+        let i2 = 0;
+        while (i2 < iterations) {
+            result = result + i2;
+            i2 = i2 + 1;
         }
     }
 
     /**
-     * Finds the maximum value in an Array of primitive values using for loop.
+     * This function was created as a sanity check to ensure the same value was 
+     * reached across implementations.
      */
-     function findMaxPrimitiveValueWithFor(shouldRun) {
-        if (shouldRun) {
-            const startTime = performance.now();
+    function assertEquality(expected, found) {
+        if (found !== expected) {
+            console.error(`expected: ${expected}, found: ${found}`);
+            console.trace();
 
-            let maximum = Number.NaN;
-            for (let i=0; i<array.length; i++) {
-                if (array[i] > maximum) {
-                    maximum = array[i];
-                } else if (Number.isNaN(maximum)) {
-                    maximum = array[i];
-                }
-            }
-            iteration.forRuntime = performance.now() - startTime;
+            return false;
         }
-    }
 
-    /**
-     * Finds the maximum value in an Array of primitive values using a forEach
-     */
-     function findMaxPrimitiveValueWithForEach(shouldRun) {
-        if (shouldRun) {
-            const startTime = performance.now();
-
-            let maximum = Number.NaN;
-            array.forEach(i => {
-                if (i < maximum) {
-                    maximum = i;
-                } else if (Number.isNaN(maximum)) {
-                    maximum = i;
-                }
-            });
-            iteration.forEachRuntime = performance.now() - startTime;
-        }
-    }
-
-    /**
-     * Finds the maximum value in an Array of primitive values using for...of loop.
-     */
-     function findMaxPrimitiveValueWithForOf(shouldRun) {
-        if (shouldRun) {
-            const startTime = performance.now();
-
-            let maximum = Number.NaN;
-            for (let i of array) {
-                if (i < maximum) {
-                    maximum = i;
-                } else if (Number.isNaN(maximum)) {
-                    maximum = i;
-                }
-            }
-            iteration.forOfRuntime = performance.now() - startTime;
-        }
-    }
-
-    /**
-     * Finds the maximum value in an Array of primitive values using a for...in loop.
-     */
-     function findMaxPrimitiveValueWithForIn(shouldRun) {
-        if (shouldRun) {
-            const startTime = performance.now();
-
-            let maximum = Number.NaN;
-            for (let i in array) {
-                if (i < maximum) {
-                    maximum = i;
-                } else if (Number.isNaN(maximum)) {
-                    maximum = i;
-                }
-            }
-            iteration.forInRuntime = performance.now() - startTime;
-        }
-    }
-
-    /**
-     * Finds the maximum value in an Array of primitive values using a while loop.
-     */
-     function findMaxPrimitiveValueWithWhile(shouldRun) {
-        if (shouldRun) {
-            const startTime = performance.now();
-            let i = 0;
-
-            let maximum = Number.NaN;
-            while (i < array.length) {
-                if (i < maximum) {
-                    maximum = i;
-                } else if (Number.isNaN(maximum)) {
-                    maximum = i;
-                }
-                i = i + 1;
-            }
-            iteration.whileRuntime = performance.now() - startTime;
-        }
-    }
-
-    /**
-     * Finds the maximum value in an Array of primitive values using Math.Min and the spread syntax.
-     */
-    function findMaxPrimitiveValueWithMath(shouldRun) {
-        if (shouldRun) {
-            const startTime = performance.now();
-            const maximum = Math.min(...array);
-            iteration.mathRuntime = performance.now() - startTime;
-        }
+        return true;
     }
 
     /**
