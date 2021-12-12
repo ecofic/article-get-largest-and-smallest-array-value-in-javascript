@@ -198,11 +198,15 @@ onmessage = (e) => {
      */
     function findMinPrimitiveValueWithMath(shouldRun) {
         if (shouldRun) {
-            const startTime = performance.now();
-            const minimum = Math.min(...array);
-            iteration.mathRuntime = performance.now() - startTime;
+            try {
+                const startTime = performance.now();
+                const minimum = Math.min(...array);
+                iteration.mathRuntime = performance.now() - startTime;
 
-            assertEquality(tempMinimum, minimum);
+                assertEquality(tempMinimum, minimum);
+            } catch (err) {
+                iteration.mathRuntime = 'N/A';
+            }
         }
     }
 
@@ -353,19 +357,23 @@ onmessage = (e) => {
      */
     function findMinObjectValueWithMath(shouldRun) {
         if (shouldRun) {
-            const startTime = performance.now();            
-            const mappings = [];
-
-            let i = 0;
-            while (i < array.length) {
-                mappings.push(array[i].p2);
-                i = i + 1;
+            try {
+                const startTime = performance.now();            
+                const mappings = [];
+    
+                let i = 0;
+                while (i < array.length) {
+                    mappings.push(array[i].p2);
+                    i = i + 1;
+                }
+    
+                const minimum = Math.min(...mappings);
+                iteration.mathRuntime = performance.now() - startTime;
+    
+                assertEquality(tempMinimum, minimum);    
+            } catch (err) {
+                iteration.mathRuntime = 'N/A';
             }
-
-            const minimum = Math.min(...mappings);
-            iteration.mathRuntime = performance.now() - startTime;
-
-            assertEquality(tempMinimum, minimum);
         }
     }
 
@@ -514,11 +522,15 @@ onmessage = (e) => {
      */
     function findMaxPrimitiveValueWithMath(shouldRun) {
         if (shouldRun) {
-            const startTime = performance.now();
-            const maximum = Math.max(...array);
-            iteration.mathRuntime = performance.now() - startTime;
-
-            assertEquality(tempMaximum, maximum);
+            try {
+                const startTime = performance.now();
+                const maximum = Math.max(...array);
+                iteration.mathRuntime = performance.now() - startTime;
+    
+                assertEquality(tempMaximum, maximum);    
+            } catch (err) {
+                iteration.mathRuntime = 'N/A';
+            }
         }
     }
 
@@ -669,19 +681,23 @@ onmessage = (e) => {
      */
     function findMaxObjectValueWithMath(shouldRun) {
         if (shouldRun) {
-            const startTime = performance.now();            
-            const mappings = [];
-
-            let i = 0;
-            while (i < array.length) {
-                mappings.push(array[i].p2);
-                i = i + 1;
+            try {
+                const startTime = performance.now();            
+                const mappings = [];
+    
+                let i = 0;
+                while (i < array.length) {
+                    mappings.push(array[i].p2);
+                    i = i + 1;
+                }
+    
+                const maximum = Math.max(...mappings);
+                iteration.mathRuntime = performance.now() - startTime;
+    
+                assertEquality(tempMaximum, maximum);    
+            } catch (err) {
+                iteration.mathRuntime = 'N/A';
             }
-
-            const maximum = Math.max(...mappings);
-            iteration.mathRuntime = performance.now() - startTime;
-
-            assertEquality(tempMaximum, maximum);
         }
     }
 
