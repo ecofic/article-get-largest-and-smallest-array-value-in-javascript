@@ -69,65 +69,69 @@
                     <div class="form-text">{{ iterationsToRunLabel }}</div>    
                 </div>
 
-                <ul class="list-inline">
-                    <li class="list-inline-item">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="useForCheckbox" v-model="useFor">
-                            <label class="form-check-label" for="useForCheckbox">Use <code>for</code></label>
-                        </div>
-                    </li>
-
-                    <li class="list-inline-item">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="useForEachCheckbox" v-model="useForEach">
-                            <label class="form-check-label" for="useForEachCheckbox">Use <code>forEach</code></label>
-                        </div>
-                    </li>
-
-                    <li class="list-inline-item">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="useForOfCheckbox" v-model="useForOf">
-                            <label class="form-check-label" for="useForOfCheckbox">Use <code>for...of</code></label>
-                        </div>
-                    </li>
-
-                    <li class="list-inline-item">
-                      <div class="form-check">
-                          <input class="form-check-input" type="checkbox" value="" id="useForInCheckbox" v-model="useForIn">
-                          <label class="form-check-label" for="useForInCheckbox">Use <code>for...in</code></label>
-                      </div>
-                    </li>
-
-                    <li class="list-inline-item">
-                      <div class="form-check">
+                <div class="d-table">
+                  <div class="d-table-row">
+                    <div class="d-table-cell">
+                      <div class="form-check me-3">
                         <input class="form-check-input" type="checkbox" value="" id="useWhileCheckbox" v-model="useWhile">
                         <label class="form-check-label" for="useWhileCheckbox">Use <code>while</code></label>
                       </div>
-                    </li>
+                    </div>
 
-                    <li class="list-inline-item">
-                      <div class="form-check">
+                    <div class="d-table-cell">
+                      <div class="form-check me-3">
+                        <input class="form-check-input" type="checkbox" value="" id="useForCheckbox" v-model="useFor">
+                        <label class="form-check-label" for="useForCheckbox">Use <code>for</code></label>
+                      </div>
+                    </div>
+  
+                    <div class="d-table-cell">
+                      <div class="form-check me-3">
+                        <input class="form-check-input" type="checkbox" value="" id="useForEachCheckbox" v-model="useForEach">
+                        <label class="form-check-label" for="useForEachCheckbox">Use <code>forEach</code></label>
+                      </div>
+                    </div>
+  
+                    <div class="d-table-cell">
+                      <div class="form-check me-3">
+                        <input class="form-check-input" type="checkbox" value="" id="useForOfCheckbox" v-model="useForOf">
+                        <label class="form-check-label" for="useForOfCheckbox">Use <code>for...of</code></label>
+                      </div>
+                    </div>
+
+                    <div class="d-table-cell">
+                      <div class="form-check me-3">
+                        <input class="form-check-input" type="checkbox" value="" id="useForInCheckbox" v-model="useForIn">
+                        <label class="form-check-label" for="useForInCheckbox">Use <code>for...in</code></label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="d-table-row">
+                    <div class="d-table-cell">
+                      <div class="form-check me-3">
                         <input class="form-check-input" type="checkbox" value="" id="useMathCheckbox" v-model="useMath">
                         <label class="form-check-label" for="useMathCheckbox">Use <code>Math</code> functions</label>
                       </div>
-                    </li>
+                    </div>
 
-                    <li class="list-inline-item">
-                      <div class="form-check">
+                    <div class="d-table-cell">
+                      <div class="form-check me-3">
                         <input class="form-check-input" type="checkbox" value="" id="useReduceCheckbox" v-model="useReduce">
                         <label class="form-check-label" for="useReduceCheckbox">Use <code>reduce</code> function</label>
                       </div>
-                    </li>
+                    </div>
 
-                    <li class="list-inline-item">
-                      <div class="form-check">
+                    <div class="d-table-cell">
+                      <div class="form-check me-3">
                         <input class="form-check-input" type="checkbox" value="" id="useMapCheckbox" v-model="useMap">
                         <label class="form-check-label" for="useMapCheckbox">Use <code>map</code> function</label>
                       </div>
-                    </li>
-                </ul>
+                    </div>
+                  </div>
+                </div>
 
-                <ul class="list-inline">
+                <ul class="list-inline mt-3">
                   <li class="list-inline-item">
                     <div class="form-check">
                       <input class="form-check-input" type="radio" id="minimumRadioButton" value="minimum" v-model="goal">
@@ -345,50 +349,50 @@
                     const iterations = this.currentRun.iterations;
                     if (this.useFor) {
                       const mean = iterations.reduce((total, r) => total + r.forRuntime, 0) / iterations.length;
-                      this.currentRun.avgForRuntime = mean;
-                      this.currentRun.avgForRuntimeFixed = parseFloat(mean.toFixed(5));
+                      this.currentRun.avgForRuntime = Number.isNaN(mean) ? 'N/A' : mean;
+                      this.currentRun.avgForRuntimeFixed = Number.isNaN(mean) ? 'N/A' : parseFloat(mean.toFixed(5));
                     }
 
                     if (this.useForEach) {
                       const mean = iterations.reduce((total, r) => total + r.forEachRuntime, 0) / iterations.length;
-                      this.currentRun.avgForEachRuntime = mean;
-                      this.currentRun.avgForEachRuntimeFixed = parseFloat(mean.toFixed(5));
+                      this.currentRun.avgForEachRuntime = Number.isNaN(mean) ? 'N/A' : mean;
+                      this.currentRun.avgForEachRuntimeFixed = Number.isNaN(mean) ? 'N/A' : parseFloat(mean.toFixed(5));
                     }
 
                     if (this.useForOf) {
                       const mean = iterations.reduce((total, r) => total + r.forOfRuntime, 0) / iterations.length;
-                      this.currentRun.avgForOfRuntime = mean;
-                      this.currentRun.avgForOfRuntimeFixed = parseFloat(mean.toFixed(5));
+                      this.currentRun.avgForOfRuntime = Number.isNaN(mean) ? 'N/A' : mean;
+                      this.currentRun.avgForOfRuntimeFixed = Number.isNaN(mean) ? 'N/A' : parseFloat(mean.toFixed(5));
                     }
 
                     if (this.useForIn) {
                       const mean = iterations.reduce((total, r) => total + r.forInRuntime, 0) / iterations.length;
-                      this.currentRun.avgForInRuntime = mean;
-                      this.currentRun.avgForInRuntimeFixed = parseFloat(mean.toFixed(5));
+                      this.currentRun.avgForInRuntime = Number.isNaN(mean) ? 'N/A' : mean;
+                      this.currentRun.avgForInRuntimeFixed = Number.isNaN(mean) ? 'N/A' : parseFloat(mean.toFixed(5));
                     }
 
                     if (this.useWhile) {
                       const mean = iterations.reduce((total, r) => total + r.whileRuntime, 0) / iterations.length;
-                      this.currentRun.avgWhileRuntime = mean;
-                      this.currentRun.avgWhileRuntimeFixed = parseFloat(mean.toFixed(5));
+                      this.currentRun.avgWhileRuntime = Number.isNaN(mean) ? 'N/A' : mean;
+                      this.currentRun.avgWhileRuntimeFixed = Number.isNaN(mean) ? 'N/A' : parseFloat(mean.toFixed(5));
                     }
 
                     if (this.useMath) {
                       const mean = iterations.reduce((total, r) => total + r.mathRuntime, 0) / iterations.length;
-                      this.currentRun.avgMathRuntime = mean;
-                      this.currentRun.avgMathRuntimeFixed = parseFloat(mean.toFixed(5));
+                      this.currentRun.avgMathRuntime = Number.isNaN(mean) ? 'N/A' : mean;
+                      this.currentRun.avgMathRuntimeFixed = Number.isNaN(mean) ? 'N/A' : parseFloat(mean.toFixed(5));
                     }
 
                     if (this.useReduce) {
                       const mean = iterations.reduce((total, r) => total + r.reduceRuntime, 0) / iterations.length;
-                      this.currentRun.avgReduceRuntime = mean;
-                      this.currentRun.avgReduceRuntimeFixed = parseFloat(mean.toFixed(5));
+                      this.currentRun.avgReduceRuntime = Number.isNaN(mean) ? 'N/A' : mean;
+                      this.currentRun.avgReduceRuntimeFixed = Number.isNaN(mean) ? 'N/A' : parseFloat(mean.toFixed(5));
                     }
 
                     if (this.useMap) {
                       const mean = iterations.reduce((total, r) => total + r.mapRuntime, 0) / iterations.length;
-                      this.currentRun.avgMapRuntime = mean;
-                      this.currentRun.avgMapRuntimeFixed = parseFloat(mean.toFixed(5));
+                      this.currentRun.avgMapRuntime = Number.isNaN(mean) ? 'N/A' : mean;
+                      this.currentRun.avgMapRuntimeFixed = Number.isNaN(mean) ? 'N/A' : parseFloat(mean.toFixed(5));
                     }
                   }
                 },
@@ -416,6 +420,10 @@
                     const value = iteration[propertyName];
                     const allRuntimes = [];
                     results.forEach(r => {
+                        if (r.whileRuntime > 0) {                 // This is a guard to ensure a value of "0" is not highlighted in any way.
+                          allRuntimes.push(r.whileRuntime);
+                        }
+
                         if (r.forRuntime > 0) {                   // This is a guard to ensure a value of "0" is not highlighted in any way.
                             allRuntimes.push(r.forRuntime);
                         }
@@ -432,12 +440,16 @@
                           allRuntimes.push(r.forInRuntime);
                         }
 
-                        if (r.whileRuntime > 0) {                 // This is a guard to ensure a value of "0" is not highlighted in any way.
-                          allRuntimes.push(r.whileRuntime);
-                        }
-
                         if (r.mathRuntime > 0) {                  // This is a guard to ensure a value of "0" is not highlighted in any way.
                           allRuntimes.push(r.mathRuntime);
+                        }
+
+                        if (r.reduceRuntime > 0) {                // This is a guard to ensure a value of "0" is not highlighted in any way.
+                          allRuntimes.push(r.reduceRuntime);
+                        }
+
+                        if (r.mapRuntime > 0) {                   // This is a guard to ensure a value of "0" is not highlighted in any way.
+                          allRuntimes.push(r.mapRuntime);
                         }
                     });
 
@@ -446,6 +458,9 @@
 
                     // Identify iteration best/worst performing
                     const iterationRuntimes = [];
+                    if (iteration.whileRuntime > 0) {
+                      iterationRuntimes.push(iteration.whileRuntime);
+                    }
                     if (iteration.forRuntime > 0) {
                         iterationRuntimes.push(iteration.forRuntime);
                     }
@@ -458,13 +473,15 @@
                     if (iteration.forInRuntime > 0) {
                       iterationRuntimes.push(iteration.forInRuntime);
                     }
-                    if (iteration.whileRuntime > 0) {
-                      iterationRuntimes.push(iteration.whileRuntime);
-                    }
                     if (iteration.mathRuntime > 0) {
                       iterationRuntimes.push(iteration.mathRuntime);
                     }
-
+                    if (iteration.reduceRuntime > 0) {
+                      iterationRuntimes.push(iteration.reduceRuntime);                      
+                    }
+                    if (iteration.mapRuntime > 0) {
+                      iterationRuntimes.push(iteration.mapRuntime);
+                    }
 
                     const fastestInIteration = Math.min(...iterationRuntimes);
                     const slowestInIteration = Math.max(...iterationRuntimes);

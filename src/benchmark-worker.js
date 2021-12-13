@@ -1,7 +1,6 @@
-// The arrays are globally defined because they're shared.
+// The array is globally defined because it's shared.
 // This is typically not recommended.
-let GLOBAL_ARRAY_1 = null;
-let GLOBAL_ARRAY_2 = null;
+let GLOBAL_ARRAY = null;
 
 onmessage = (e) => {
     let array = null;
@@ -57,7 +56,7 @@ onmessage = (e) => {
                 findMinObjectValueWithForEach(options.useForEach);
                 findMinObjectValueWithForOf(options.useForOf);
                 findMinObjectValueWithForIn(options.useForIn);
-                findMinObjectValueWithMath(options.useMath);    
+                findMinObjectValueWithMath(options.useMath);
                 findMinObjectValueWithReduce(options.useReduce);
                 findMinObjectValueWithMap(options.useMap);
             }
@@ -77,7 +76,7 @@ onmessage = (e) => {
                 findMaxObjectValueWithForEach(options.useForEach);
                 findMaxObjectValueWithForOf(options.useForOf);
                 findMaxObjectValueWithForIn(options.useForIn);
-                findMaxObjectValueWithMath(options.useMath);    
+                findMaxObjectValueWithMath(options.useMath);
                 findMaxObjectValueWithReduce(options.useReduce);
                 findMaxObjectValueWithMap(options.useMap);
             }
@@ -688,7 +687,7 @@ onmessage = (e) => {
     }
 
     /**
-     * Finds the maximum value in an Array of objects using Math.Min and the spread syntax.
+     * Finds the maximum value in an Array of objects using Math.Max and the spread syntax.
      * This function assumes a property named "p2" contains the value used for evaluation.
      */
     function findMaxObjectValueWithMath(shouldRun) {
