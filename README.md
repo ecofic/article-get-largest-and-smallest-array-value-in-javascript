@@ -1,5 +1,5 @@
 # Article
-This repository is associated with the [Get Largest, Smallest, and Average Array Value in Javascript](#) article.
+This repository is associated with the [Get Largest and Smallest Array Value in Javascript](#) article.
 This repository includes the samples and basic performance benchmark tool used in that article.
 
 ## Getting Started
@@ -7,7 +7,7 @@ To get started:
 
 **Clone this repository**
 ```
-git clone https://github.com/ecofic/article-efficiently-merging-arrays-in-javascript.git
+git clone https://github.com/ecofic/article-get-largest-and-smallest-array-value-in-javascript.git
 ```
 
 **Install the dependencies**
