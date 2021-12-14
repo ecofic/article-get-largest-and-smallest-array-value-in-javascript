@@ -27,9 +27,10 @@ Now that you're up and running with this code, I want to close out by give you a
 ## Tour
 This repository includes the following directories:
 
-| Directory       | Purpose                                                                                                                       |
-|-----------------|-------------------------------------------------------------------------------------------------------------------------------|
-| [`src`](./src/) | The samples and benchmark tool associated with the [Get Largest, Smallest, and Average Array Value in Javascript](#) article. |
+| Directory            | Purpose                                                                                                                       |
+|----------------------|-------------------------------------------------------------------------------------------------------------------------------|
+| [`images`](./images) | Images used in the article that complements this repository.                                                                  |
+| [`src`](./src/)      | The samples and benchmark tool associated with the [Get Largest, Smallest, and Average Array Value in Javascript](#) article. |
 
 At this point, you should be able to experiement with this repository.
 I also want to provide a special thanks.
