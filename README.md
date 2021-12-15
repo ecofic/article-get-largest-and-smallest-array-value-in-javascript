@@ -46,3 +46,7 @@ These repositories sped up the development of this sample code.
 
 If this repository helped _you_, I hope you'll provide attribution in some way. 
 Thank you. 👍
+
+## Disclaimer
+This implementation is a "quick-and-dirty" implementation.
+For that reason, professional enhancements like minification, bundling, code splitting, etc. were not used.
