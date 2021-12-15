@@ -128,6 +128,20 @@
                         <label class="form-check-label" for="useMapCheckbox">Use <code>map</code> function</label>
                       </div>
                     </div>
+
+                    <div class="d-table-cell">
+                      <div class="form-check me-3">
+                        <input class="form-check-input" type="checkbox" value="" id="useSplitCheckbox" v-model="useDivideAndConquer">
+                        <label class="form-check-label" for="useSplitCheckbox">Use Divide and Conquer</label>
+                      </div>
+                    </div>
+
+                    <div class="d-table-cell">
+                      <div class="form-check me-3">
+                        <input class="form-check-input" type="checkbox" value="" id="usePairsCheckbox" v-model="usePairs">
+                        <label class="form-check-label" for="usePairsCheckbox">Use Pair Comparison</label>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -177,6 +191,8 @@
                               <th class="text-nowrap" v-if="useMath"><code>Math...</code> Runtime</th>
                               <th class="text-nowrap" v-if="useReduce"><code>reduce</code> Runtime</th>
                               <th class="text-nowrap" v-if="useMap"><code>map</code> Runtime</th>
+                              <th class="text-nowrap" v-if="useDivideAndConquer">Divide and Conquer Runtime</th>
+                              <th class="text-nowrap" v-if="usePairs">Pair Comparison Runtime</th>
                             </tr>
                           </thead>
 
@@ -191,6 +207,8 @@
                               <td class="text-nowrap" v-if="useMath" :class="getPerformanceClasses(iteration, testRun.iterations, 'mathRuntime')">{{ formatRuntime(iteration.mathRuntime) }}</td>
                               <td class="text-nowrap" v-if="useReduce" :class="getPerformanceClasses(iteration, testRun.iterations, 'reduceRuntime')">{{ formatRuntime(iteration.reduceRuntime) }}</td>
                               <td class="text-nowrap" v-if="useMap" :class="getPerformanceClasses(iteration, testRun.iterations, 'mapRuntime')">{{ formatRuntime(iteration.mapRuntime) }}</td>
+                              <td class="text-nowrap" v-if="useDivideAndConquer" :class="getPerformanceClasses(iteration, testRun.iterations, 'splitRuntime')">{{ formatRuntime(iteration.splitRuntime) }}</td>
+                              <td class="text-nowrap" v-if="usePairs" :class="getPerformanceClasses(iteration, testRun.iterations, 'pairRuntime')">{{ formatRuntime(iteration.pairRuntime) }}</td>
                             </tr>
                           </tbody>
 
@@ -205,6 +223,8 @@
                               <td v-if="useMath" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="testRun.avgMathRuntime">{{ testRun.avgMathRuntimeFixed }} ms.</td>
                               <td v-if="useReduce" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="testRun.avgReduceRuntime">{{ testRun.avgReduceRuntimeFixed }} ms.</td>
                               <td v-if="useMap" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="testRun.avgMapRuntime">{{ testRun.avgMapRuntimeFixed }} ms.</td>
+                              <td v-if="useDivideAndConquer" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="testRun.avgSplitRuntime">{{ testRun.avgSplitRuntimeFixed }} ms.</td>
+                              <td v-if="usePairs" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="testRun.avgPairRuntime">{{ testRun.avgPairRuntimeFixed }} ms.</td>
                             </tr>
                           </tfoot>
                         </table>
@@ -268,6 +288,8 @@
                     useMath: true,
                     useReduce: true,
                     useMap: true,
+                    useDivideAndConquer: true,
+                    usePairs: true,
 
                     arrayElementType: 'values',
                     arrayElementCount: 1000
@@ -330,7 +352,8 @@
                       useFor:this.useFor, useForEach:this.useForEach, 
                       useForOf:this.useForOf, useForIn:this.useForIn,
                       useWhile:this.useWhile, useMath:this.useMath,
-                      useReduce:this.useReduce, useMap:this.useMap
+                      useReduce:this.useReduce, useMap:this.useMap,
+                      useDivideAndConquer:this.useDivideAndConquer, usePairs:this.usePairs
                     };
                     worker.postMessage(message);
                 },
@@ -394,6 +417,18 @@
                       this.currentRun.avgMapRuntime = Number.isNaN(mean) ? 'N/A' : mean;
                       this.currentRun.avgMapRuntimeFixed = Number.isNaN(mean) ? 'N/A' : parseFloat(mean.toFixed(5));
                     }
+
+                    if (this.useDivideAndConquer) {
+                      const mean = iterations.reduce((total, r) => total + r.splitRuntime, 0) / iterations.length;
+                      this.currentRun.avgSplitRuntime = Number.isNaN(mean) ? 'N/A' : mean;
+                      this.currentRun.avgSplitRuntimeFixed = Number.isNaN(mean) ? 'N/A' : parseFloat(mean.toFixed(5));
+                    }
+
+                    if (this.usePairs) {
+                      const mean = iterations.reduce((total, r) => total + r.pairRuntime, 0) / iterations.length;
+                      this.currentRun.avgPairRuntime = Number.isNaN(mean) ? 'N/A' : mean;
+                      this.currentRun.avgPairRuntimeFixed = Number.isNaN(mean) ? 'N/A' : parseFloat(mean.toFixed(5));
+                    }                    
                   }
                 },
 
@@ -451,6 +486,14 @@
                         if (r.mapRuntime > 0) {                   // This is a guard to ensure a value of "0" is not highlighted in any way.
                           allRuntimes.push(r.mapRuntime);
                         }
+
+                        if (r.splitRuntime > 0) {                 // This is a guard to ensure a value of "0" is not highlighted in any way.
+                          allRuntimes.push(r.splitRuntime);
+                        }
+
+                        if (r.pairRuntime > 0) {                  // This is a guard to ensure a value of "0" is not highlighted in any way.
+                          allRuntimes.push(r.pairRuntime);
+                        }
                     });
 
                     const fastestOverall = Math.min(...allRuntimes);
@@ -481,6 +524,14 @@
                     }
                     if (iteration.mapRuntime > 0) {
                       iterationRuntimes.push(iteration.mapRuntime);
+                    }
+
+                    if (iteration.splitRuntime > 0) {
+                      iterationRuntimes.push(iteration.splitRuntime);
+                    }
+
+                    if (iteration.pairRuntime > 0) {
+                      iterationRuntimes.push(iteration.pairRuntime);
                     }
 
                     const fastestInIteration = Math.min(...iterationRuntimes);

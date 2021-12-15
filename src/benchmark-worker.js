@@ -50,6 +50,9 @@ onmessage = (e) => {
                 findMinPrimitiveValueWithMath(options.useMath);
                 findMinPrimitiveValueWithReduce(options.useReduce);
                 findMinPrimitiveValueWithMap(options.useMap);
+
+                findMinPrimitiveValueWithDivideAndConquer(options.useDivideAndConquer);
+                findMinPrimitiveValueWithPairs(options.usePairs);
             } else if (arrayType === 'objects') {
                 findMinObjectValueWithWhile(options.useWhile);
                 findMinObjectValueWithFor(options.useFor);
@@ -238,6 +241,68 @@ onmessage = (e) => {
             } catch (err) {
                 iteration.mapRuntime = 'N/A';
             }
+        }
+    }
+
+    function findMinPrimitiveValueWithDivideAndConquer(shouldRun) {
+        if (shouldRun) {
+            try {
+                const startTime = performance.now();
+                const minimum = findMinPrimitiveValueWithDivideAndConquerImplementation(0, (array.length-1));
+                iteration.splitRuntime = performance.now() - startTime;
+    
+                assertEquality(tempMinimum, minimum);    
+            } catch (err) {
+                iteration.splitRuntime = 'N/A';
+            }
+        }
+    }
+
+    function findMinPrimitiveValueWithDivideAndConquerImplementation(start, end) {
+        let minimum = array[start];
+        if (start === end) {
+            minimum = array[start];
+        } else if ((start+1) === end) {
+            minimum = (array[start] < array[end]) ? array[start] : array[end];
+        } else {
+            const mid = Math.floor((end - start) / 2) + start;
+            const left = findMinPrimitiveValueWithDivideAndConquerImplementation(start, mid);
+            const right = findMinPrimitiveValueWithDivideAndConquerImplementation((mid+1), end);
+            minimum = (left < right) ? left : right;
+        }
+
+        return minimum;
+    }
+
+    function findMinPrimitiveValueWithPairs(shouldRun) {
+        if (shouldRun) {
+            const startTime = performance.now();
+            let minimum = Number.NaN;
+
+            let i = 0;
+            if (array.length % 2) {
+                minimum = array[0];
+                i = 1;
+            } else {
+                minimum = (array[0] < array[1]) ? array[0] : array[1];
+                i = 2;
+            }
+
+            while (i < array.length) {
+                if (array[i] < array[i+1]) {
+                    if (array[i] < minimum) {
+                        minimum = array[i];
+                    }
+                } else {
+                    if (array[i+1] < minimum) {
+                        minimum = array[i+1];
+                    }
+                }
+                i = i + 2;
+            }
+
+            iteration.pairRuntime = performance.now() - startTime;    
+            assertEquality(tempMinimum, minimum);    
         }
     }
 
