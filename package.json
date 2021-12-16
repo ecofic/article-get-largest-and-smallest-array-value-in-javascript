@@ -1,7 +1,7 @@
 {
-  "name": "article-get-largest-smallest-and-average-array-value-in-javascript",
+  "name": "article-get-largest-and-smallest-array-value-in-javascript",
   "version": "1.0.0",
-  "description": "Code supporting the article on getting the largest, smallest, and average value in a JavaScript array.",
+  "description": "Code supporting the article on getting the largest and smallest value in a JavaScript array.",
   "main": "index.js",
   "scripts": {
     "dev": "lite-server --baseDir='src'"
