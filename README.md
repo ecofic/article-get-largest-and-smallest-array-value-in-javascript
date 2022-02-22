@@ -1,5 +1,5 @@
 # Article
-This repository is associated with the [Get Largest and Smallest Array Value in Javascript](#) article.
+This repository is associated with the [Get Largest and Smallest Array Value in Javascript](https://medium.com/@chad.campbell/getting-the-largest-smallest-and-average-array-element-value-in-javascript-70624e117ee6) article.
 This repository includes the samples and basic performance benchmark tool used in that article.
 
 ## Getting Started
@@ -30,7 +30,7 @@ This repository includes the following directories:
 | Directory            | Purpose                                                                                                                       |
 |----------------------|-------------------------------------------------------------------------------------------------------------------------------|
 | [`images`](./images) | Images used in the article that complements this repository.                                                                  |
-| [`src`](./src/)      | The samples and benchmark tool associated with the [Get Largest and Smallest Array Value in Javascript](#) article. |
+| [`src`](./src/)      | The samples and benchmark tool associated with the [Get Largest and Smallest Array Value in Javascript](https://medium.com/@chad.campbell/getting-the-largest-smallest-and-average-array-element-value-in-javascript-70624e117ee6) article. |
 
 At this point, you should be able to experiement with this repository.
 I also want to provide a special thanks.
